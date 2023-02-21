@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Find a Roommate</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<!-- Navigation bar goes here -->
+{% include 'navbar.html' %}
+    <!-- Main content goes here -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                {% block content %}{% endblock %}
+            </div>
+            <div class="col-md-4">
+                <!-- Sidebar content goes here -->
+                {% block sidebar %}
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Popular Posts</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><a href="#">How to Find a Great Roommate</a></li>
+                                <li><a href="#">The Best Websites for Roommate Searches</a></li>
+                                <li><a href="#">10 Tips for Living with a Roommate</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5>Recent Posts</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><a href="#">Moving in with Your Roommate: A Guide</a></li>
+                                <li><a href="#">The Benefits of Having a Roommate</a></li>
+                                <li><a href="#">How to Avoid Common Roommate Problems</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    <!-- Footer goes here -->
+    {% include 'footer.html' %}
+</body>
+</html>

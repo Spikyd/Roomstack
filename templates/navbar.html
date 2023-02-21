@@ -1,0 +1,49 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'home' %}">
+        <img src="{% static 'images/icon.png' %}" alt="Find a Roommate Icon"
+             class="img-fluid d-inline-block align-top" style="max-width: 50px;">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item {% if request.path == '/' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="nav-item {% if request.path == '/browse/' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'browse' %}">Browse Roommates</a>
+            </li>
+            <li class="nav-item {% if request.path == '/post/' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'post' %}">Post a Room</a>
+            </li>
+            <li class="nav-item {% if request.path == '/contact/' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{{ user.profile.image.url }}" class="rounded-circle" width="30" height="30">
+                        {{ user.username }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Edit Profile</a>
+                        <a class="dropdown-item" href="#">Messages</a>
+                        <a class="dropdown-item" href="#">Favorite Rooms</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                    </div>
+                </li>
+            {% else %}
+                <li class="nav-item {% if request.path == '/login/' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
