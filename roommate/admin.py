@@ -1,6 +1,7 @@
 from django.contrib import admin
-from roommate.models import Roommate, Room, Contact
+from roommate.models import Apartment, UserProfile, Favorite
 
-admin.site.register(Roommate)
-admin.site.register(Room)
-admin.site.register(Contact)
+admin.site.register(Apartment)
+admin.site.register(UserProfile)
+admin.site.register(Favorite)
+

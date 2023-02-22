@@ -1,48 +1,40 @@
-from django.core.mail import send_mail
-from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import TemplateView
 
-from roommate.forms import RoomForm, ContactForm
-from roommate.models import Roommate, Room
+from roommate.forms import MessageForm
+from roommate.models import Apartment, Favorite, UserProfile
 
 
 class HomeTemplateView(TemplateView):
     template_name = 'home_page.html'
 
 
-class BrowseRoommatesView(ListView):
-    model = Roommate
-    template_name = 'browse_roommates.html'
-    context_object_name = 'roommates'
+@login_required
+def add_favorite(request, room_id):
+    room = get_object_or_404(Apartment, id=room_id)
+    favorite, created = Favorite.objects.get_or_create(user=request.user, room=room)
+    return redirect('room_detail', room_id=room.id)
 
 
-class RoomDetailView(DetailView):
-    model = Room
-    template_name = 'room_detail.html'
-    context_object_name = 'room'
+@login_required
+def favorite_list(request):
+    favorites = Favorite.objects.filter(user=request.user)
+    return render(request, 'favorite_list.html', {'favorites': favorites})
 
-
-class PostARoomView(CreateView):
-    model = Room
-    form_class = RoomForm
-    template_name = 'post_a_room.html'
-    success_url = reverse_lazy('room_list')
-
-
-class ContactUsView(CreateView):
-    template_name = 'contact_us.html'
-    form_class = ContactForm
-    success_url = reverse_lazy('contact_success')
-
-    def form_valid(self, form):
-        name = form.cleaned_data['name']
-        email = form.cleaned_data['email']
-        message = form.cleaned_data['message']
-        send_mail(
-            'Contact Form Submission',
-            f'Name: {name}\nEmail: {email}\nMessage: {message}',
-            'info@findaroommate.com',
-            ['admin@findaroommate.com'],
-            fail_silently=False,
-        )
-        return super().form_valid(form)
+@login_required
+def compose_message(request, receiver_id):
+    receiver = get_object_or_404(User, id=receiver_id)
+    form = MessageForm()
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = Message(sender=request.user, receiver=receiver, message=form.cleaned_data['message'])
+            message.save()
+            sender_profile = UserProfile.objects.get(user=request.user)
+            receiver_profile = UserProfile.objects.get(user=receiver)
+            sender_profile.messages.add(message)
+            receiver_profile.messages.add(message)
+            return redirect('profile', username=receiver.username)
+    return render(request, 'compose_message.html', {'receiver': receiver, 'form': form})

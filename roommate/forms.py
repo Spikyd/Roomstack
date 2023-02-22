@@ -1,32 +1,13 @@
 from django import forms
-from .models import Room, Contact, Post
+from django.contrib.auth.models import User
+
+from roommate.models import Message
 
 
-class RoomForm(forms.ModelForm):
+class MessageForm(forms.ModelForm):
+    receiver = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.Select(attrs={'class': 'form-select'}))
+    message = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': '3'}))
+
     class Meta:
-        model = Room
-        fields = ['title', 'description', 'price', 'location']
-
-
-class ContactForm(forms.ModelForm):
-    class Meta:
-        model = Contact
-        fields = ['name', 'email', 'message']
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'message': forms.Textarea(attrs={'class': 'form-control'}),
-        }
-
-
-class PostForm(forms.ModelForm):
-    class Meta:
-        model = Post
-        fields = ['title', 'location', 'description', 'price', 'image']
-        widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'location': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control'}),
-            'price': forms.NumberInput(attrs={'class': 'form-control'}),
-            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-        }
+        model = Message
+        fields = ['receiver', 'message']
