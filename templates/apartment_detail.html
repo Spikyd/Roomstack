@@ -2,7 +2,6 @@
 {% load static %}
 <head>
     <title>Browse Rooms</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/browse_rooms.css' %}">
 </head>
 {% block content %}
     <div class="container mt-5">
@@ -74,7 +73,18 @@
                             {% endif %}
                         </div>
                     </div>
-
+                    <div class="gallery mt-5">
+                        <div class="row">
+                            {% for image in apartment.images.all %}
+                                {% if image.image %}
+                                    <div class="col-md-4 mb-4">
+                                        <img src="{{ image.image.url }}" alt="{{ apartment.address }}"
+                                             class="img-fluid">
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-4">
