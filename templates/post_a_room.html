@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-plus-circle"></i>Post a Room</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <input type="text" name="address" id="address" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" name="city" id="city" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State</label>
+                                <input type="text" name="state" id="state" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="zipcode">Zipcode</label>
+                                <input type="text" name="zipcode" id="zipcode" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <input type="number" name="price" id="price" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="bedrooms">Bedrooms</label>
+                                <select name="bedrooms" id="bedrooms" class="form-control" required>
+                                    <option value="">Choose</option>
+                                    <option value="Private">Private</option>
+                                    <option value="Shared">Shared</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="bathrooms">Bathrooms</label>
+                                <select name="bathrooms" id="bathrooms" class="form-control" required>
+                                    <option value="">Choose</option>
+                                    <option value="Private">Private</option>
+                                    <option value="Shared">Shared</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="move_in_date">Move-in Date</label>
+                                <input type="date" name="move_in_date" id="move_in_date" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="is_furnished">Is Furnished?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="is_furnished"
+                                           id="is_furnished_yes"
+                                           value="1" checked>
+                                    <label class="form-check-label" for="is_furnished_yes">
+                                        Yes
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="is_furnished"
+                                           id="is_furnished_no"
+                                           value="0">
+                                    <label class="form-check-label" for="is_furnished_no">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="has_parking">Has Parking?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="has_parking" id="has_parking"
+                                           value="1">
+                                    <label class="form-check-label" for="has_parking">
+                                        Yes
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="has_balcony">Has Balcony?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="has_balcony" id="has_balcony"
+                                           value="1">
+                                    <label class="form-check-label" for="has_balcony">
+                                        Yes
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="has_pool">Has Pool?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="has_pool" id="has_pool"
+                                           value="1">
+                                    <label class="form-check-label" for="has_pool">
+                                        Yes
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="has_gym">Has Gym?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="has_gym" id="has_gym"
+                                           value="1">
+                                    <label class="form-check-label" for="has_gym">
+                                        Yes
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="has_washing_machine">Has Washing Machine?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="has_washing_machine"
+                                           id="has_washing_machine" value="1">
+                                    <label class="form-check-label" for="has_washing_machine">
+                                        Yes
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="has_dryer">Has Dryer?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="has_dryer" id="has_dryer"
+                                           value="1">
+                                    <label class="form-check-label" for="has_dryer">
+                                        Yes
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="has_dishwasher">Has Dishwasher?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="has_dishwasher"
+                                           id="has_dishwasher" value="1">
+                                    <label class="form-check-label" for="has_dishwasher">
+                                        Yes
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="has_air_conditioning">Has Air Conditioning?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="has_air_conditioning"
+                                           id="has_air_conditioning" value="1">
+                                    <label class="form-check-label" for="has_air_conditioning">
+                                        Yes
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="has_wifi">Has Wi-Fi?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="has_wifi" id="has_wifi"
+                                           value="1">
+                                    <label for="has_wifi">
+                                        Yes
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="has_bbq_facilities">Has BBQ facilities?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="has_bbq_facilities"
+                                           id="has_bbq_facilities" value="1">
+                                    <label class="form-check-label" for="has_bbq_facilities">
+                                        Yes
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="available_from">Available From</label>
+                                <input type="date" name="available_from" id="available_from" class="form-control"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                {{ form.images }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

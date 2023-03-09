@@ -1,0 +1,42 @@
+/* Center the login card */
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Adjust card margin and padding */
+.card {
+    margin-top: 40px;
+    padding: 30px;
+}
+
+/* Style the form labels */
+.form-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Add spacing between form controls */
+.form-group:not(:last-of-type) {
+    margin-bottom: 20px;
+}
+
+/* Style the "Forgot Password?" link */
+.link-primary {
+    font-size: 14px;
+    color: #0d6efd;
+}
+
+/* Style the "Register" button */
+.btn-outline-primary {
+    font-size: 14px;
+    padding: 8px 20px;
+}
+
+/* Add hover and focus effects to buttons */
+.btn:hover,
+.btn:focus {
+    opacity: 0.8;
+    outline: none;
+}

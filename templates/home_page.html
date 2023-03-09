@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Roommate Finder</title>
+{% endblock %}
+
+{% block content %}
+    {% if user.is_autenticated %}
+        <div class="hero-content">
+            <h1>Find Your Perfect Roommate Today</h1>
+            <p>With our easy-to-use roommate finder, you can quickly and easily find a roommate that fits your
+                lifestyle and budget.</p>
+        </div>
+    {% endif %}
+    <section class="main-section">
+        <!-- Hero Section -->
+        <div class="hero-section"></div>
+
+        <!-- Features and Testimonials Section -->
+        <div class="container-fluid features-section">
+            <div class="feature d-flex mb-4">
+                <div class="feature-icon mr-4">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Easy to Use</h3>
+                    <p>Our roommate finder is designed to be easy to use, so you can quickly find the right roommate
+                        for you.</p>
+                </div>
+            </div>
+            <div class="feature d-flex mb-4">
+                <div class="feature-icon mr-4">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Customizable</h3>
+                    <p>You can customize your search based on your preferences, such as budget, location, and
+                        lifestyle.</p>
+                </div>
+            </div>
+            <div class="feature d-flex">
+                <div class="feature-icon mr-4">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Secure</h3>
+                    <p>We take your privacy and security seriously, so you can trust that your information is safe
+                        with us.</p>
+                </div>
+            </div>
+            <div class="feature d-flex">
+                <div class="feature-icon mr-4">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Find Your Perfect Roommate</h3>
+                    <p>With our advanced search filters, you can find a roommate that matches your lifestyle and
+                        preferences.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="testimonials">
+            <h2>What Our Customers Say</h2>
+            <div class="testimonial-container">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Testimonial 1">
+                        <div class="testimonial-info">
+                            <h3>Jane Doe</h3>
+                            <span>Los Angeles, CA</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-body">
+                        <p>"I found my perfect roommate through this website! It was so easy to use and saved me so much
+                            time
+                            and stress."</p>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Testimonial 2">
+                        <div class="testimonial-info">
+                            <h3>John Smith</h3>
+                            <span>New York, NY</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-body">
+                        <p>"I had been searching for a roommate for months before I found this website. I'm so grateful
+                            for the
+                            help!"</p>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="https://randomuser.me/api/portraits/women/3.jpg" alt="Testimonial 3">
+                        <div class="testimonial-info">
+                            <h3>Sarah Johnson</h3>
+                            <span>San Francisco, CA</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-body">
+                        <p>"I was hesitant to try a roommate finder website at first, but I'm so glad I did. I found the
+                            perfect
+                            roommate, and we get along great!"</p>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="https://randomuser.me/api/portraits/women/3.jpg" alt="Testimonial 3">
+                        <div class="testimonial-info">
+                            <h3>Sarah Johnson</h3>
+                            <span>San Francisco, CA</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-body">
+                        <p>"I was hesitant to try a roommate finder website at first, but I'm so glad I did. I found the
+                            perfect
+                            roommate, and we get along great!"</p>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="https://randomuser.me/api/portraits/men/4.jpg" alt="Testimonial 4">
+                        <div class="testimonial-info">
+                            <h3>Tom Wilson</h3>
+                            <span>Chicago, IL</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-body">
+                        <p>"I was skeptical about using a roommate finder website, but I'm so glad I did. I found a
+                            great roommate, and we get along really well!"</p>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="https://randomuser.me/api/portraits/women/5.jpg" alt="Testimonial 5">
+                        <div class="testimonial-info">
+                            <h3>Jessica Rodriguez</h3>
+                            <span>Miami, FL</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-body">
+                        <p>"I had been struggling to find a roommate for months, but this website made it so easy. I
+                            found a great roommate within days, and we've been living together happily ever since!"</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- Footer section -->
+{% include 'footer.html' %}
+{% endblock %}
+

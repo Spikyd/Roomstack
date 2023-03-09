@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<head>
+    <title>Browse Rooms</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/browse_rooms.css' %}">
+</head>
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="mb-4"><i class="fas fa-search"></i> Browse Rooms</h2>
+        <div class="row">
+            {% for apartment in apartments %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        {% for image in apartment.images.all %}
+                            {% if image.image %}
+                                {% if forloop.counter0 == 0 %}
+                                    <img class="card-img-top img-fluid" src="{{ image.image.url }}"
+                                         alt="Profile Image">
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ apartment.address }}, {{ apartment.city }}, {{ apartment.state }} {{ apartment.zipcode }}</h5>
+                            <p class="card-text">Price: {{ apartment.price }} lei</p>
+                            <p class="card-text">Bedrooms: {{ apartment.bedrooms }}</p>
+                            <p class="card-text">Bathrooms: {{ apartment.bathrooms }}</p>
+                            <p class="card-text">Move-in Date: {{ apartment.move_in_date|date:"F j, Y" }}</p>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <a href="{% url 'apartment_detail' apartment.id %}" class="btn btn-primary btn-sm"><i
+                                        class="fas fa-info-circle"></i></a>
+                                <form method="post" action="{% url 'toggle_favorite' pk=apartment.id %}">
+                                    {% csrf_token %}
+                                    <button class="btn btn-outline-secondary btn-sm" type="submit">
+                                        {% if apartment.is_favorite %}
+                                            <i class="fas fa-heart" style="color: #F44336"></i>
+                                        {% else %}
+                                            <i class="fas fa-heart"></i>
+                                        {% endif %}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No apartments found.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

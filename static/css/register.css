@@ -1,0 +1,120 @@
+/* Custom styles for the registration form */
+
+body {
+  background-color: #f7f7f7;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  width: 360px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  padding: 20px;
+  text-align: center;
+  background-color: #fff;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom: 1px solid #d6d6d6;
+}
+
+.card-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+}
+
+.card-body {
+  padding: 20px;
+  background-color: #fff;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-control {
+  width: 100%;
+  padding: 15px 20px;
+  border: 1px solid #d6d6d6;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #555;
+  background-color: #fff;
+  box-shadow: none;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #51a1e2;
+}
+
+.input-group {
+  position: relative;
+}
+
+.input-group-text {
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  color: #ccc;
+}
+
+.input-group .form-control {
+  padding-left: 30px;
+}
+
+.btn-primary {
+  background-color: #51a1e2;
+  border-color: #51a1e2;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  padding: 15px 20px;
+  width: 100%;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: #218ed5;
+  border-color: #218ed5;
+}
+
+.text-center {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+.text-center a {
+  color: #51a1e2;
+  text-decoration: none;
+}
+
+.text-center a:hover, .text-center a:focus {
+  color: #218ed5;
+}

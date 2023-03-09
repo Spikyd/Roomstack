@@ -3,8 +3,16 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 
-class Apartment(models.Model):
+def get_upload_path(object_, filename):
+    if isinstance(object_, UserProfile):
+        return f'{object_.user.username}/avatars/{filename}'
+    elif isinstance(object_, Apartment):
+        return f'{object_.author.username}/apartment_pics/{filename}'
+    else:
+        return f'{filename}'
 
+
+class Apartment(models.Model):
     BEDROOM_CHOICES = [
         ('Private', 'Private'),
         ('Shared', 'Shared'),
@@ -20,7 +28,7 @@ class Apartment(models.Model):
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
     zipcode = models.CharField(max_length=10)
-    price = models.DecimalField(max_digits=8, decimal_places=2)
+    price = models.DecimalField(max_digits=8, decimal_places=0)
     bedrooms = models.CharField(max_length=7, choices=BEDROOM_CHOICES, default='Private')
     bathrooms = models.CharField(max_length=7, choices=BATHROOM_CHOICES, default='Private')
     move_in_date = models.DateField(default=timezone.now)
@@ -46,13 +54,33 @@ class Apartment(models.Model):
     # Author
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    # Pictures
+    images = models.ManyToManyField('ApartmentImage', blank=True)
+
     def __str__(self):
         return f'{self.author.first_name} {self.address} {self.city} {self.state}'
 
 
+class ApartmentImage(models.Model):
+    image = models.ImageField(upload_to=get_upload_path)
+
+    def is_favorite(self):
+        return Favorite.objects.filter(apartment=self).first() is not None
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'apartment')
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_pic = models.ImageField(upload_to='static/avatars/', blank=True)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+    profile_pic = models.ImageField(upload_to=get_upload_path, null=True, blank=True)
     bio = models.CharField(max_length=500, blank=True)
     birthdate = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=200, blank=True)
@@ -60,34 +88,6 @@ class UserProfile(models.Model):
     social_facebook = models.URLField(blank=True)
     social_twitter = models.URLField(blank=True)
     social_instagram = models.URLField(blank=True)
-    messages = models.ManyToManyField(Message, blank=True)
-    received_messages = models.ManyToManyField(Message, related_name='receiver')
-    sent_messages = models.ManyToManyField(Message, related_name='sender')
 
     def __str__(self):
         return self.user.username
-
-    def get_received_messages(self):
-        return self.received_messages.all()
-
-    def get_sent_messages(self):
-        return self.sent_messages.all()
-
-
-class Favorite(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    room = models.ForeignKey(Apartment, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ['user', 'room']
-
-
-class Message(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
-    message = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-
-

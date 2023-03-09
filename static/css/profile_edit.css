@@ -1,0 +1,22 @@
+.card {
+    margin: 0 auto;
+    margin-top: 2rem;
+    max-width: 600px;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+}
+
+.form-group textarea {
+    height: 150px;
+}
+
+.btn-primary {
+    margin-top: 1rem;
+}
