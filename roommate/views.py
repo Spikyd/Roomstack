@@ -1,15 +1,38 @@
+from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, UpdateView, CreateView, DetailView
 
-from roommate.forms import UserRegisterForm, UserProfileForm, ApartmentForm
+from roommate.forms import UserRegisterForm, UserProfileForm, ApartmentForm, AuthenticationNewForm
 from roommate.models import Apartment, UserProfile, Favorite, ApartmentImage
 
 
 class HomeTemplateView(TemplateView):
     template_name = 'home_page.html'
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationNewForm(data=request.POST)
+        if form.is_valid():
+            remember_me = form.cleaned_data.get('remember_me')
+            if remember_me:
+                request.session.set_expiry(settings.SESSION_COOKIE_AGE)
+            else:
+                request.session.set_expiry(0)
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+    else:
+        form = AuthenticationNewForm()
+    return render(request, 'registration/login.html', {'form': form})
 
 
 def register(request):
@@ -19,8 +42,10 @@ def register(request):
             user = form.save()
             user_profile = UserProfile()
             user_profile.user = user
+            user_profile.user_type = form.cleaned_data['user_type']
             user_profile.save()
-            return redirect('login')
+
+            return render(request, 'registration/account_created.html')
     else:
         form = UserRegisterForm()
     return render(request, 'registration/register.html', {'form': form})
@@ -38,7 +63,7 @@ def toggle_favorite(request, pk):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-class UserProfileUpdateView(UpdateView):
+class UserProfileUpdateView(UpdateView, LoginRequiredMixin):
     model = UserProfile
     form_class = UserProfileForm
     template_name = 'profile_edit.html'

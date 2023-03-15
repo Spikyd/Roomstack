@@ -6,7 +6,7 @@
             <img src="{% static 'logo.png' %}" alt="Logo">
         </div>
         <div class="navbar-links">
-            <a href="#" class="navbar-link">
+            <a href="{% url 'home' %}" class="navbar-link">
                 <i class="fas fa-home"></i>
                 Home
             </a>
@@ -14,10 +14,17 @@
                 <i class="fas fa-search"></i>
                 Browse Rooms
             </a>
-            <a href="{% url 'post_room' %}" class="navbar-link">
-                <i class="fas fa-plus-circle"></i>
-                Post a Room
-            </a>
+            {% if user.userprofile.user_type == 'provider' %}
+                <a href="{% url 'post_room' %}" class="navbar-link">
+                    <i class="fas fa-plus-circle"></i>
+                    Post a Room
+                </a>
+            {% else %}
+                <a href="{% url 'post_room' %}" class="navbar-link">
+                    <i class="fas fa-user"></i>
+                    Find roommates
+                </a>
+            {% endif %}
             <a href="#" class="navbar-link">
                 <i class="fas fa-bell"></i>
                 Notifications
@@ -58,7 +65,7 @@
         </div>
         <div class="navbar-call-to-action">
             <h3>Join us today and find your perfect roommate!</h3>
-            <a href="{% url 'login' %}" class="btn btn-primary">Sign Up</a>
+            <a href="{% url 'register' %}" class="btn btn-primary">Sign Up</a>
         </div>
     </nav>
 

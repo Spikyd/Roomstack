@@ -1,35 +1,32 @@
 {% extends 'base.html' %}
 {% load static %}
-<head>
-    <title>Browse Rooms</title>
-</head>
 {% block content %}
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card">
-                    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            {% for image in apartment.images.all %}
-                                {% if image.image %}
-                                    <div class="{% if forloop.first %}active {% endif %}carousel-item">
-                                        <img src="{{ image.image.url }}" class="d-block w-100"
-                                             alt="{{ apartment.address }}" style="height: 500px">
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade"
-                                data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade"
-                                data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden=true></span>
-                            <span class=visually-hidden>Next</span>
-                        </button>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-3">
+                <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for image in apartment.images.all %}
+                            {% if image.image %}
+                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                    <img src="{{ image.image.url }}" class="d-block w-100"
+                                         alt="{{ apartment.address }}" style="height: 500px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                     </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade"
+                            data-bs-slide="prev" style='background-color: transparent; border-radius: 50%;'>
+                        <span class='carousel-control-prev-icon' aria-hidden='true'></span>
+                        <span class='visually-hidden'>Previous</span>
+                    </button>
+                    <button class='carousel-control-next' type='button' data-bs-target='#carouselExampleFade'
+                            data-bs-slide='next' style='background-color: transparent; border-radius: 50%;'>
+                        <span class='carousel-control-next-icon' aria-hidden=true></span>
+                        <span class='visually-hidden'>Next</span>
+                    </button>
+                </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ apartment.address }}, {{ apartment.city }}, {{ apartment.state }} {{ apartment.zipcode }}</h5>
                         <p class="card-text">Price: {{ apartment.price }} lei</p>
@@ -59,47 +56,44 @@
                             {% if apartment.has_dryer %}
                                 <div class="col-sm-3"><i class="fas fa-tshirt"></i> Dryer</div>
                             {% endif %}
-                            {% if apartment.has_dishwasher %}
-                                <div class="col-sm-3"><i class="fas fa-utensils"></i> Dishwasher</div>
-                            {% endif %}
-                            {% if apartment.has_air_conditioning %}
-                                <div class="col-sm-3"><i class="fas fa-snowflake"></i> Air Conditioning</div>
-                            {% endif %}
-                            {% if apartment.has_wifi %}
-                                <div class="col-sm-3"><i class="fas fa-wifi"></i> Wi-Fi</div>
-                            {% endif %}
-                            {% if apartment.has_bbq_facilities %}
-                                <div class="col-sm-3"><i class="fas fa-fire"></i> BBQ Facilities</div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="gallery mt-5">
-                        <div class="row">
-                            {% for image in apartment.images.all %}
-                                {% if image.image %}
-                                    <div class="col-md-4 mb-4">
-                                        <img src="{{ image.image.url }}" alt="{{ apartment.address }}"
-                                             class="img-fluid">
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
+                                                {% if apartment.has_dishwasher %}
+                            <div class="col-sm-3"><i class="fas fa-utensils"></i> Dishwasher</div>
+                        {% endif %}
+                        {% if apartment.has_air_conditioning %}
+                            <div class="col-sm-3"><i class="fas fa-snowflake"></i> Air Conditioning</div>
+                        {% endif %}
+                        {% if apartment.has_wifi %}
+                            <div class="col-sm-3"><i class="fas fa-wifi"></i> Wi-Fi</div>
+                        {% endif %}
+                        {% if apartment.has_bbq_facilities %}
+                            <div class="col-sm-3"><i class="fas fa-fire"></i> BBQ Facilities</div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Owner Details</h5>
-                        <p class="card-text">
-                            Name: {{ apartment.author.userprofile.first_name }} {{ apartment.author.userprofile.last_name }}</p>
-                        <p class="card-text">Email: {{ apartment.author.email }}</p>
-                        <p class="card-text">Phone: {{ apartment.author.userprofile.phone_number }}</p>
-                        <a href="{% url 'user_profile' apartment.author.userprofile.id %}" class="btn btn-primary">View
-                            Profile</a>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Owner Details</h5>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <img src="{{ apartment.author.userprofile.profile_pic.url }}" alt="{{ apartment.author.username }}"
+                                 class="img-fluid rounded-circle mb-2">
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <p class="card-text">
+                                <strong>Name:</strong> {{ apartment.author.userprofile.first_name }} {{ apartment.author.userprofile.last_name }}</p>
+                            <p class="card-text"><strong>Email:</strong> {{ apartment.author.email }}</p>
+                            <p class="card-text"><strong>Phone:</strong> {{ apartment.author.userprofile.phone_number }}</p>
+                            <a href="{% url 'user_profile' apartment.author.userprofile.id %}" class="btn btn-primary">View
+                                Profile</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

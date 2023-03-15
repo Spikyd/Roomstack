@@ -1,19 +1,66 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, AuthenticationForm
 from django.contrib.auth.models import User
-from django.forms import EmailInput, Textarea, DateInput, TextInput, URLInput
+from django.forms import EmailInput, Textarea, DateInput, TextInput, URLInput, PasswordInput
 
 from roommate.models import UserProfile, Apartment
 
 
+class AuthenticationNewForm(AuthenticationForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['username'].widget.attrs.update(
+            {'class': 'form-control', 'placeholder': 'Please enter your username'})
+        self.fields['password'].widget.attrs.update(
+            {'class': 'form-control', 'placeholder': 'Please enter your password'})
+
+
 class UserRegisterForm(UserCreationForm):
+    user_type = forms.ChoiceField(choices=UserProfile.USER_TYPE_CHOICES)
+
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2', 'user_type']
 
         widgets = {
             'email': EmailInput(attrs={'placeholder': 'Please enter your email'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].help_text = ''
+        self.fields['password1'].help_text = ''
+        self.fields['password2'].help_text = ''
+        self.fields['username'].widget.attrs.update({'placeholder': 'Please enter your username'})
+        self.fields['password1'].widget.attrs.update({'placeholder': 'Please enter your password'})
+        self.fields['password2'].widget.attrs.update({'placeholder': 'Please enter your password again'})
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email already exists.")
+        return email
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("password1")
+        password2 = cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords don't match")
+
+
+class PasswordChangeNewForm(PasswordChangeForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['old_password'].widget.attrs.update({'class': 'form-control',
+                                                         'placeholder': 'Please enter your old password'})
+        self.fields['new_password1'].widget.attrs.update({'class': 'form-control',
+                                                          'placeholder': 'Please enter your new password'})
+        self.fields['new_password2'].widget.attrs.update({'class': 'form-control',
+                                                          'placeholder': 'Please enter your new password confirmation'})
 
 
 class UserProfileForm(forms.ModelForm):

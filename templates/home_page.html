@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
-
-{% block head %}
-    <title>Roommate Finder</title>
-{% endblock %}
-
+{% block title %}Roommate finder{% endblock %}
+{% block head %}{% include 'navbar.html' %}{% endblock %}
 {% block content %}
     {% if user.is_autenticated %}
         <div class="hero-content">

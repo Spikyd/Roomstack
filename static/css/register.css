@@ -1,120 +1,98 @@
-/* Custom styles for the registration form */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 body {
-  background-color: #f7f7f7;
-  font-family: 'Open Sans', sans-serif;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-.wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+.register-container {
+    width: 350px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    padding: 20px 30px;
 }
 
-.card {
-  width: 360px;
-  border: none;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.register-container h1 {
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-.card-header {
-  padding: 20px;
-  text-align: center;
-  background-color: #fff;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-bottom: 1px solid #d6d6d6;
+form p {
+    margin-bottom: 20px;
 }
 
-.card-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #333;
+form label {
+    display: block;
+    margin-bottom: 5px;
 }
 
-.card-body {
-  padding: 20px;
-  background-color: #fff;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
-.form-group {
-  margin-bottom: 20px;
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus {
+    outline: none;
+    border-color: #4c87ed;
 }
 
-.form-label {
-  display: block;
-  font-weight: 700;
-  margin-bottom: 5px;
-  color: #333;
+.submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #4c87ed;
+    border: none;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
 }
 
-.form-control {
-  width: 100%;
-  padding: 15px 20px;
-  border: 1px solid #d6d6d6;
-  border-radius: 5px;
-  font-size: 16px;
-  color: #555;
-  background-color: #fff;
-  box-shadow: none;
-  transition: border-color 0.2s ease-in-out;
+.submit-btn:hover {
+    background-color: #3b68c7;
 }
 
-.form-control:focus {
-  outline: none;
-  border-color: #51a1e2;
+.login-link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
 }
 
-.input-group {
-  position: relative;
+.login-link a {
+    color: #4c87ed;
+    text-decoration: none;
 }
 
-.input-group-text {
-  background-color: transparent;
-  border: none;
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  color: #ccc;
+.login-link a:hover {
+    text-decoration: underline;
 }
 
-.input-group .form-control {
-  padding-left: 30px;
+.errorlist {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
 }
 
-.btn-primary {
-  background-color: #51a1e2;
-  border-color: #51a1e2;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-  padding: 15px 20px;
-  width: 100%;
-  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+.messages {
+    list-style: none;
+    padding: 0;
 }
 
-.btn-primary:hover, .btn-primary:focus {
-  background-color: #218ed5;
-  border-color: #218ed5;
-}
-
-.text-center {
-  text-align: center;
-  color: #666;
-  font-size: 14px;
-}
-
-.text-center a {
-  color: #51a1e2;
-  text-decoration: none;
-}
-
-.text-center a:hover, .text-center a:focus {
-  color: #218ed5;
+.messages li.success {
+    color: green;
 }

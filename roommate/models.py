@@ -77,7 +77,12 @@ class Favorite(models.Model):
 
 
 class UserProfile(models.Model):
+    USER_TYPE_CHOICES = [
+        ('provider', 'Provider'),
+        ('seeker', 'Seeker'),
+    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, null=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     profile_pic = models.ImageField(upload_to=get_upload_path, null=True, blank=True)

@@ -8,6 +8,7 @@ from roommate.views import ApartmentCreateView, ApartmentDetailView, UserProfile
 urlpatterns = [
     path('', views.HomeTemplateView.as_view(), name='home'),
     path('register/', views.register, name='register'),
+    path('login/', views.login_view, name='login'),
     path('profile-edit/<int:pk>/', views.UserProfileUpdateView.as_view(), name='profile_edit'),
     path('post-room/', ApartmentCreateView.as_view(), name='post_room'),
     path('browse_rooms/', views.browse_rooms, name='browse_rooms'),
