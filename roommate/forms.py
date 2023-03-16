@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, AuthenticationForm, PasswordResetForm
 from django.contrib.auth.models import User
 from django.forms import EmailInput, Textarea, DateInput, TextInput, URLInput, PasswordInput
 
@@ -17,8 +17,19 @@ class AuthenticationNewForm(AuthenticationForm):
             {'class': 'form-control', 'placeholder': 'Please enter your password'})
 
 
+class PasswordResetNewForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password1'].help_text = ''
+        self.fields['password2'].help_text = ''
+        self.fields['password1'].widget.attrs.update(
+            {'class': 'form-control', 'placeholder': 'Please enter your password'})
+        self.fields['password2'].widget.attrs.update(
+            {'class': 'form-control', 'placeholder': 'Please confirm your password'})
+
+
 class UserRegisterForm(UserCreationForm):
-    user_type = forms.ChoiceField(choices=UserProfile.USER_TYPE_CHOICES)
+    user_type = forms.ChoiceField(choices=UserProfile.USER_TYPE_CHOICES, label='Roommate Role')
 
     class Meta:
         model = User
@@ -42,13 +53,6 @@ class UserRegisterForm(UserCreationForm):
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("This email already exists.")
         return email
-
-    def clean(self):
-        cleaned_data = super().clean()
-        password1 = cleaned_data.get("password1")
-        password2 = cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match")
 
 
 class PasswordChangeNewForm(PasswordChangeForm):

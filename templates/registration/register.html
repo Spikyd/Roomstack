@@ -7,13 +7,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Page</title>
     <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let userTypeField = document.getElementById('id_user_type');
+            let userTypeHelpText = document.getElementById('user_type_help_text');
+
+            function updateUserTypeHelpText() {
+                if (userTypeField.value === 'provider') {
+                    userTypeHelpText.innerText = 'As a roommate provider, you can offer shared spaces.';
+                } else if (userTypeField.value === 'seeker') {
+                    userTypeHelpText.innerText = 'As a roommate seeker, you can search for shared spaces or roommates.';
+                } else {
+                    userTypeHelpText.innerText = '';
+                }
+            }
+
+            userTypeField.addEventListener('change', updateUserTypeHelpText);
+            updateUserTypeHelpText();
+        });
+    </script>
 </head>
 <body>
 <div class="register-container">
     <h1>Register</h1>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.auto_id }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.name == 'user_type' %}
+                    <small class="help-text" id="user_type_help_text"></small>
+                {% else %}
+                    <small class="help-text">{{ field.help_text }}</small>
+                {% endif %}
+                {% if field.errors %}
+                    <span class="error">{{ field.errors.0 }}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
         <button type="submit" class="submit-btn">Register</button>
     </form>
     <div class="login-link">

@@ -78,8 +78,8 @@ class Favorite(models.Model):
 
 class UserProfile(models.Model):
     USER_TYPE_CHOICES = [
-        ('provider', 'Provider'),
-        ('seeker', 'Seeker'),
+        ('provider', 'Roommate Provider'),
+        ('seeker', 'Roommate Seeker'),
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, null=True)

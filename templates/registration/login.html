@@ -20,13 +20,22 @@
     <h1>Login</h1>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <div class="remember-me">
-            <input type="checkbox" id="{{ form.remember_me.id_for_label }}" name="{{ form.remember_me.html_name }}">
-            <label for="{{ form.remember_me.id_for_label }}">Remember me</label>
+        <div class="form-group">
+            {{ form.username.label_tag }}
+            {{ form.username }}
         </div>
-        <div class="forgot-password">
-            <a href="{% url 'password_reset' %}">Forgot password?</a>
+        <div class="form-group">
+            {{ form.password.label_tag }}
+            {{ form.password }}
+        </div>
+        <div class="bottom-row">
+            <div class="remember-me">
+                <input type="checkbox" id="{{ form.remember_me.id_for_label }}" name="{{ form.remember_me.html_name }}">
+                <label for="{{ form.remember_me.id_for_label }}">Remember me</label>
+            </div>
+            <div class="forgot-password">
+                <a href="{% url 'password_reset' %}">Forgot password?</a>
+            </div>
         </div>
         <button type="submit" class="submit-btn">Login</button>
     </form>
