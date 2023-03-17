@@ -8,6 +8,7 @@
     {% include 'navbar.html' %}
     <div class="container mt-5">
         <h2 class="mb-4"><i class="fas fa-search"></i> Browse Rooms</h2>
+
         <div class="row">
             {% for apartment in apartments %}
                 <div class="col-md-4 mb-4">
@@ -35,7 +36,7 @@
                                         {% if apartment.is_favorite %}
                                             <i class="fas fa-heart" style="color: #F44336"></i>
                                         {% else %}
-                                            <i class="fas fa-heart"></i>
+                                            <i class="fas fa-heart" style="color: #ffffff"></i>
                                         {% endif %}
                                     </button>
                                 </form>

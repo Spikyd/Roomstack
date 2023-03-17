@@ -64,6 +64,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'roommate.context_processors.navbar_data',
+                'roommate.context_processors.user_has_posted_room',
             ],
         },
     },

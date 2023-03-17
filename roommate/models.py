@@ -6,8 +6,8 @@ from django.utils import timezone
 def get_upload_path(object_, filename):
     if isinstance(object_, UserProfile):
         return f'{object_.user.username}/avatars/{filename}'
-    elif isinstance(object_, Apartment):
-        return f'{object_.author.username}/apartment_pics/{filename}'
+    elif isinstance(object_, ApartmentImage):
+        return f'{object_.apartment.author.username}/apartment_pics/{filename}'
     else:
         return f'{filename}'
 
@@ -55,17 +55,18 @@ class Apartment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     # Pictures
-    images = models.ManyToManyField('ApartmentImage', blank=True)
+    images = models.ManyToManyField('ApartmentImage', blank=True, related_name='apartments')
 
     def __str__(self):
         return f'{self.author.first_name} {self.address} {self.city} {self.state}'
 
-
-class ApartmentImage(models.Model):
-    image = models.ImageField(upload_to=get_upload_path)
-
     def is_favorite(self):
         return Favorite.objects.filter(apartment=self).first() is not None
+
+
+class ApartmentImage(models.Model):
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, null=True)
+    image = models.ImageField(upload_to=get_upload_path, null=True, blank=True)
 
 
 class Favorite(models.Model):

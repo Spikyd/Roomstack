@@ -3,10 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import PasswordResetView
-from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, UpdateView, CreateView, DetailView
 
@@ -66,6 +63,12 @@ def toggle_favorite(request, pk):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+def user_has_room(request):
+    user_apartments_count = Apartment.objects.filter(author=request.user).count()
+    context = {'user_apartments_count': user_apartments_count}
+    return render(request, 'home_page.html', context)
+
+
 class UserProfileUpdateView(UpdateView, LoginRequiredMixin):
     model = UserProfile
     form_class = UserProfileForm
@@ -88,6 +91,13 @@ class ApartmentCreateView(CreateView):
     template_name = 'post_a_room.html'
     success_url = reverse_lazy('home')
 
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        if Apartment.objects.filter(author=user).exists():
+            messages.error(request, 'You are not allowed to post more than one room.')
+            return redirect('home')
+        return super().get(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
@@ -97,7 +107,7 @@ class ApartmentCreateView(CreateView):
             apartment.author = request.user
             apartment.save()
             for f in files:
-                image_instance = ApartmentImage.objects.create(image=f)
+                image_instance = ApartmentImage.objects.create(image=f, apartment=apartment)
                 apartment.images.add(image_instance)
                 apartment.save()
             return redirect(self.success_url)
