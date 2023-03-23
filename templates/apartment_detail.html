@@ -80,7 +80,7 @@
                         <hr>
                         <div class="row">
                             <div class="col-12 col-md-4">
-                                {% if userprofile.profile_pic %}
+                                {% if apartment.author.userprofile.profile_pic %}
                                     <img src="{{ apartment.author.userprofile.profile_pic.url }}"
                                          alt="{{ apartment.author.username }}"
                                          class="img-fluid rounded-circle mb-2">
@@ -97,9 +97,12 @@
                                 <p class="card-text"><strong>Email:</strong> {{ apartment.author.email }}</p>
                                 <p class="card-text">
                                     <strong>Phone:</strong> {{ apartment.author.userprofile.phone_number }}</p>
-                                <a href="{% url 'user_profile' apartment.author.userprofile.id %}"
-                                   class="btn btn-primary">View
-                                    Profile</a>
+                                <div class="d-flex">
+                                    <a href="{% url 'user_profile' apartment.author.pk %}" class="btn btn-primary">View
+                                        Profile</a>
+                                    <a href="{% url 'messages_view' apartment.author.pk %}"
+                                       class="btn btn-secondary ml-2">Message</a>
+                                </div>
                             </div>
                         </div>
                     </div>

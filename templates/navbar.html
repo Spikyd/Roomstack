@@ -6,13 +6,19 @@
         crossorigin="anonymous"></script>
 {% load static %}
 {% if user.is_authenticated %}
-    {% if messages %}
+    {% if messages and not suppress_messages_modal %}
         <!-- Modal -->
         <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                        <h5 class="modal-title" id="errorModalLabel">{% for message in messages %}
+                            {% if message.tags == 'success' %}
+                                Success
+                            {% elif message.tags == 'error' %}
+                                Error
+                            {% endif %}
+                        {% endfor %}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -45,8 +51,8 @@
                 Browse Rooms
             </a>
             {% if user.userprofile.user_type == 'provider' %}
-                {% if user_has_posted_room %}
-                    <a href="#" class="navbar-link">
+                {% if user_apartment %}
+                    <a href="{% url 'manage_apartment' user_apartment.pk %}" class="navbar-link">
                         <i class="fas fa-cog"></i>
                         Manage Apartment
                     </a>
@@ -56,15 +62,19 @@
                         Post a Room
                     </a>
                 {% endif %}
-            {% else %}
-                <a href="{% url 'post_room' %}" class="navbar-link">
+            {% endif %}
+            {% if user.userprofile.user_type == 'seeker' %}
+                <a href="{% url 'matched_users' %}" class="navbar-link">
                     <i class="fas fa-user"></i>
                     Find roommates
                 </a>
             {% endif %}
-            <a href="#" class="navbar-link">
+            <a href="{% url 'unread_messages' %}" class="navbar-link">
                 <i class="fas fa-bell"></i>
                 Notifications
+                {% if unread_message_count > 0 %}
+                    <span class="badge bg-danger">{{ unread_message_count }}</span>
+                {% endif %}
             </a>
         </div>
         <div class="navbar-profile">
@@ -82,12 +92,16 @@
                         <p class="profile-name">@{{ user.userprofile.user }}<br></p>
                     {% endif %}
                     {% if user_profile.id %}
-                        <a href="{% url 'profile_edit' user_profile.id %}" class="dropdown-link"><i
-                                class="fas fa-user"></i>Edit Profile</a>
+                        <a href="{% url 'settings' %}" class="dropdown-link">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
                     {% endif %}
-                    <a href="#" class="dropdown-link"><i
-                            class="fas fa-cogs"></i>Manage Apartment</a>
-                    <a href="#" class="dropdown-link"><i class="fas fa-heart"></i>Favorite Rooms</a>
+                    <a href="{% url 'conversations_view' %}" class="dropdown-link"><i class="fas fa-envelope"></i> Inbox</a>
+                    {% if user.userprofile.user_type == 'seeker' %}
+                        <a href="{% url 'favorite_rooms' %}" class="dropdown-link"><i class="fas fa-heart"></i>
+                            Favorite
+                            Rooms</a>
+                    {% endif %}
                     <a href="{% url 'logout' %}" class="dropdown-link"><i class="fas fa-sign-out-alt"></i>
                         Logout</a>
                 </div>

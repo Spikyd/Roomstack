@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block loadcss %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/messages.css' %}">{% endblock %}
+{% block content %}
+    {% include 'navbar.html' %}
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col-md-3">
+                <h3 class="text-center mb-4">Conversations</h3>
+                <div class="list-group">
+                    {% for user in users_with_conversations %}
+                        <a href="{% url 'messages_view' user.pk %}" class="list-group-item list-group-item-action">
+                            {{ user.userprofile.first_name }} {{ user.userprofile.last_name }}, {{ user.userprofile.location }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="message-container">
+                    <h2 class="text-center mb-4">Messages between {{ request.user.userprofile.first_name }}
+                        and {{ receiver.userprofile.first_name }}</h2>
+                    <div class="messages">
+                        {% for message in chat_messages %}
+                            <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+                                <div class="user-avatar">
+                                    {% if message.sender.userprofile.profile_pic %}
+                                        <img src="{{ message.sender.userprofile.profile_pic.url }}"
+                                             alt="{{ message.sender.username }}'s profile picture">
+                                    {% else %}
+                                        <img src="{% static 'members/avatar_logo.png' %}"
+                                             alt="Default profile picture">
+                                    {% endif %}
+                                </div>
+                                <div class="message-bubble">
+                                    <div class="message-content">
+                                        <strong>{{ message.sender.userprofile.first_name }}:</strong> {{ message.content }}<br>
+                                        <small>{{ message.timestamp }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="send-message-form mt-4 d-flex justify-content-center">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="d-flex">
+                                {{ form.content }}
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    {% if receiver.userprofile.profile_pic %}
+                        <img src="{{ receiver.userprofile.profile_pic.url }}" class="card-img-top profile-pic"
+                             alt="User Profile Picture">
+                    {% else %}
+                        <img src="{% static 'members/avatar_logo.png' %}" class="card-img-top profile-pic"
+                             alt="User Profile Picture">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ receiver.userprofile.first_name }} {{ receiver.userprofile.last_name }}</h5>
+                        <p class="card-text">{{ receiver.userprofile.bio|truncatewords:20 }}</p>
+                        <p class="mt-3 mb-1">Compatibility:</p>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar"
+                                 style="width: {{ compatibility_score }}%; min-width: 30px; background-color: {% progress_bar_color compatibility_score %};"
+                                 aria-valuenow="{{ compatibility_score }}" aria-valuemin="0"
+                                 aria-valuemax="100">{{ compatibility_score|floatformat:0 }}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

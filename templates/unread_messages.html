@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Unread Messages{% endblock %}
+
+{% block content %}
+    {% include 'navbar.html' %}
+    <style>
+        .unread-messages-container {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        .unread-messages-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .unread-messages-list li {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            padding: 15px;
+        }
+
+        .unread-messages-list a {
+            color: #007bff;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .unread-messages-list a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+    </style>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="unread-messages-container mt-4">
+                    <h1 class="text-center mb-4">Unread Messages</h1>
+                    <ul class="unread-messages-list">
+                        {% for conversation in conversations %}
+                            <li>
+                                <a href="{% url 'messages_view' conversation.sender.pk %}">{{ conversation.sender.userprofile.first_name }} {{ conversation.sender.userprofile.last_name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

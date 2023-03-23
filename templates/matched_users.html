@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block title %} Find Roommates {% endblock %}
+{% block content %}
+    {% include 'navbar.html' %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="mb-4">Matched Users</h2>
+            </div>
+        </div>
+        <div class="row">
+            {% for user, compatibility in matched_users %}
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+                    <div class="card">
+                        {% if user.userprofile.profile_pic %}
+                            <img src="{{ user.userprofile.profile_pic.url }}" class="card-img-top profile-pic"
+                                 alt="User Profile Picture">
+                        {% else %}
+                            <img src="{% static 'members/avatar_logo.png' %}" class="card-img-top profile-pic"
+                                 alt="User Profile Picture">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ user.userprofile.first_name }} {{ user.userprofile.last_name }}</h5>
+                            <p class="card-text">{{ user.userprofile.bio|truncatewords:20 }}</p>
+                            <div class="d-flex">
+                                {% if user.id %}
+                                    <a href="{% url 'user_profile' user.id %}" class="btn btn-primary me-2">View
+                                        Profile</a>
+                                    {% with user.apartment_set.first as user_apartment %}
+                                        {% if user_apartment %}
+                                            <a href="{% url 'apartment_detail' user_apartment.id %}"
+                                               class="btn btn-secondary">View Apartment</a>
+                                        {% endif %}
+                                    {% endwith %}
+                                {% endif %}
+                            </div>
+                            <p class="mt-3 mb-1">Compatibility:</p>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar"
+                                     style="width: {{ compatibility }}%; min-width: 30px; background-color: {% progress_bar_color compatibility %};"
+                                     aria-valuenow="{{ compatibility }}" aria-valuemin="0"
+                                     aria-valuemax="100">{{ compatibility|floatformat:0 }}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,50 +1,43 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% block title %}User Profile{% endblock %}
 {% block loadcss %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/user_profile.css' %}">{% endblock %}
-
 {% block content %}
     {% include 'navbar.html' %}
     <div class="container">
+        <h1>{{ user_profile.first_name }}'s Profile</h1>
+        <hr>
         <div class="row">
             <div class="col-md-4">
-                <div class="card">
-                    <img src="{% if userprofile.profile_pic %}{{ userprofile.profile_pic.url }}{% else %}{% static 'members/avatar_logo.png' %}{% endif %}"
-                         class="card-img-top" alt="Profile Picture">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ userprofile.user.username }}</h5>
-                        <p class="card-text">{{ userprofile.bio }}</p>
-                        <ul class="list-unstyled">
-                            <li><i class="fas fa-map-marker-alt"></i> {{ userprofile.location }}</li>
-                            <li><i class="fas fa-birthday-cake"></i> {{ userprofile.birthdate }}</li>
-                            <li><i class="fas fa-phone"></i> {{ userprofile.phone_number }}</li>
-                            {% if userprofile.social_facebook %}
-                                <li><a href="{{ userprofile.social_facebook }}"><i class="fab fa-facebook"></i></a>
-                                </li>{% endif %}
-                            {% if userprofile.social_twitter %}
-                                <li><a href="{{ userprofile.social_twitter }}"><i class="fab fa-twitter"></i></a>
-                                </li>{% endif %}
-                            {% if userprofile.social_instagram %}
-                                <li><a href="{{ userprofile.social_instagram }}"><i class="fab fa-instagram"></i></a>
-                                </li>{% endif %}
-                        </ul>
-                    </div>
-                </div>
+                {% if user_profile.profile_pic %}
+                    <img src="{{ user_profile.profile_pic.url }}" alt="{{ user_profile.user.username }}"
+                         class="img-thumbnail">
+                {% else %}
+                    <img src="{% static 'members/avatar_logo.png' %}" alt="Default profile picture"
+                         class="img-thumbnail">
+                {% endif %}
             </div>
             <div class="col-md-8">
-                <h2>{{ userprofile.first_name }} {{ userprofile.last_name }}</h2>
-                <hr>
-                <h4>About Me</h4>
-                <p>{{ userprofile.bio }}</p>
-                <h4>My Roommate Preferences</h4>
-                <ul>
-                    <li>Gender: {{ userprofile.user_type }}</li>
-                    <li>Age Range: {{ userprofile.age_range }}</li>
-                    <li>Location: {{ userprofile.preferred_location }}</li>
-                    <li>Smoking: {{ userprofile.smoking_preference }}</li>
-                    <li>Pets: {{ userprofile.pet_preference }}</li>
+                <h3>{{ user_profile.first_name }} {{ user_profile.last_name }}</h3>
+                <p><strong>User Type:</strong> {{ user_profile.get_user_type_display }}</p>
+                <p><strong>Location:</strong> {{ user_profile.location }}</p>
+                <p><strong>Phone Number:</strong> {{ user_profile.phone_number }}</p>
+                <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
+                <p><strong>Birthdate:</strong> {{ user_profile.birthdate }}</p>
+                <h4>Social Media</h4>
+                <ul class="social-icons">
+                    {% if user_profile.social_facebook %}
+                        <li><a href="{{ user_profile.social_facebook }}" target="_blank" rel="noopener noreferrer"
+                               title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+                    {% endif %}
+                    {% if user_profile.social_twitter %}
+                        <li><a href="{{ user_profile.social_twitter }}" target="_blank" rel="noopener noreferrer"
+                               title="Twitter"><i class="fab fa-twitter"></i></a></li>
+                    {% endif %}
+                    {% if user_profile.social_instagram %}
+                        <li><a href="{{ user_profile.social_instagram }}" target="_blank" rel="noopener noreferrer"
+                               title="Instagram"><i class="fab fa-instagram"></i></a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

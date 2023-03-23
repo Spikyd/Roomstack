@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'roommate.apps.RoommateConfig',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -65,6 +66,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'roommate.context_processors.navbar_data',
                 'roommate.context_processors.user_has_posted_room',
+                'roommate.context_processors.unread_message_count',
             ],
         },
     },

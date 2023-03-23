@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block title %}User Settings{% endblock %}
+
+{% block content %}
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h1 class="my-4">User Settings</h1>
+                <div class="list-group">
+                    <a href="#" id="profile-link" class="list-group-item list-group-item-action bg-primary text-white">Edit
+                        Profile</a>
+                    <a href="#" id="preference-link"
+                       class="list-group-item list-group-item-action bg-primary text-white">Edit Preferences</a>
+                    <a href="#" id="lifestyle-link"
+                       class="list-group-item list-group-item-action bg-primary text-white">Edit Lifestyle</a>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h1 class="my-4">&nbsp;</h1>
+                <div id="profile-content" style="display: none;">
+                    <form method="post" enctype='multipart/form-data'>
+                        {% csrf_token %}
+                        {{ profile_form.as_p }}
+                        <input type="hidden" name="form_type" value="profile_form">
+                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                    </form>
+                </div>
+                <div id="preference-content" style="display: none;">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ preference_form.as_p }}
+                        <input type="hidden" name="form_type" value="preference_form">
+                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                    </form>
+                </div>
+                <div id="lifestyle-content" style="display: none;">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ lifestyle_form.as_p }}
+                        <input type="hidden" name="form_type" value="lifestyle_form">
+                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type='text/javascript'>
+        $(document).ready(function () {
+            // Show profile content when profile link is clicked
+            $("#profile-link").click(function () {
+                $("#profile-content").show();
+                $("#preference-content").hide();
+                $("#lifestyle-content").hide();
+                // Add active class to profile link and remove from preference link
+                $(this).addClass('active');
+                $("#preference-link").removeClass('active');
+                $("#lifestyle-link").removeClass('active');
+            });
+            // Show preference content when preference link is clicked
+            $("#preference-link").click(function () {
+                $("#preference-content").show();
+                $("#profile-content").hide();
+                $("#lifestyle-content").hide();
+                // Add active class to preference link and remove from profile link
+                $(this).addClass('active');
+                $("#profile-link").removeClass('active');
+                $("#lifestyle-link").removeClass('active');
+            });
+            // Show lifestyle content when lifestyle link is clicked
+            $("#lifestyle-link").click(function () {
+                $("#lifestyle-content").show();
+                $("#profile-content").hide();
+                $("#preference-content").hide();
+                // Add active class to lifestyle link and remove from profile and preference links
+                $(this).addClass('active');
+                $("#profile-link").removeClass('active');
+                $("#preference-link").removeClass('active');
+            });
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            const interestsData = [
+                'Music', 'Sports', 'Movies', 'Art', 'Photography', 'Technology', 'Travel', 'Cooking',
+                'Fitness', 'Fashion', 'Gardening', 'Nature', 'Dancing', 'Writing', 'Politics', 'Animals',
+                'Volunteering', 'History', 'Video Games', 'DIY'
+            ];
+
+            const hobbiesData = [
+                'Reading', 'Gaming', 'Traveling', 'Hiking', 'Cycling', 'Swimming', 'Painting', 'Drawing',
+                'Knitting', 'Singing', 'Yoga', 'Meditation', 'Fishing', 'Camping', 'Running', 'Golf',
+                'Tennis', 'Skiing', 'Photography', 'Pottery'
+            ];
+
+            function split(val) {
+                return val.split(/,\s*/);
+            }
+
+            function extractLast(term) {
+                return split(term).pop();
+            }
+
+            $('#id_interests, #id_hobbies')
+                .autocomplete({
+                    minLength: 0,
+                    source: function (request, response) {
+                        const currentId = this.element[0].id;
+                        const sourceData = currentId === 'id_interests' ? interestsData : hobbiesData;
+                        const currentValues = split(this.element[0].value);
+
+                        response($.ui.autocomplete.filter(sourceData, extractLast(request.term)).filter(item => {
+                            return !currentValues.includes(item);
+                        }));
+                    },
+                    focus: function () {
+                        return false;
+                    },
+                    select: function (event, ui) {
+                        let terms = split(this.value);
+                        terms.pop(); // Remove the current input
+                        terms.push(ui.item.value); // Add the selected item
+                        terms.push(''); // Add a placeholder for the next term
+                        this.value = terms.join(', ');
+                        return false;
+                    },
+                });
+        });
+    </script>
+
+
+    <style type='text/css'>
+        form {
+            border: 2px solid #ccc;
+            padding: 20px;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        .list-group-item.active {
+            box-shadow: inset 0 0 10px #ccc;
+            font-weight: bold;
+        }
+    </style>
+
+{% endblock %}

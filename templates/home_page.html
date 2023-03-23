@@ -2,13 +2,6 @@
 {% block title %}Roommate finder{% endblock %}
 {% block head %}{% include 'navbar.html' %}{% endblock %}
 {% block content %}
-    {% if user.is_autenticated %}
-        <div class="hero-content">
-            <h1>Find Your Perfect Roommate Today</h1>
-            <p>With our easy-to-use roommate finder, you can quickly and easily find a roommate that fits your
-                lifestyle and budget.</p>
-        </div>
-    {% endif %}
     <section class="main-section">
         <!-- Hero Section -->
         <div class="hero-section"></div>
@@ -56,7 +49,15 @@
                 </div>
             </div>
         </div>
-
+        <div class="nationwide">
+            <h2>Thousands of roommates available nationwide!</h2>
+            <div class="nationwide-content">
+                <img src="https://i.ytimg.com/vi/_8By8Hwyrx4/maxresdefault.jpg" alt="Nationwide Image">
+                <div class="nationwide-cta">
+                    <a href="{% url 'register' %}" class="cta-button">Find Your Roommate Now</a>
+                </div>
+            </div>
+        </div>
         <div class="testimonials">
             <h2>What Our Customers Say</h2>
             <div class="testimonial-container">
@@ -148,6 +149,6 @@
         </div>
     </section>
     <!-- Footer section -->
-{% include 'footer.html' %}
+    {% include 'footer.html' %}
 {% endblock %}
 

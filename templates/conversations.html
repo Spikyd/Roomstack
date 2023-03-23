@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% include 'navbar.html' %}
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col-md-3">
+                <h3 class="text-center mb-4">Conversations</h3>
+                <div class="list-group">
+                    {% for user in users_with_conversations %}
+                        <a href="{% url 'messages_view' user.pk %}" class="list-group-item list-group-item-action">
+                            {{ user.userprofile.first_name }} {{ user.userprofile.last_name }}, {{ user.userprofile.location }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -8,7 +8,7 @@
     <title>Register Page</title>
     <link rel="stylesheet" href="{% static 'css/register.css' %}">
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             let userTypeField = document.getElementById('id_user_type');
             let userTypeHelpText = document.getElementById('user_type_help_text');
 
@@ -38,6 +38,8 @@
                 {{ field }}
                 {% if field.name == 'user_type' %}
                     <small class="help-text" id="user_type_help_text"></small>
+                {% elif field.name == 'gender' %}
+                    <small class="help-text">Please select your gender.</small>
                 {% else %}
                     <small class="help-text">{{ field.help_text }}</small>
                 {% endif %}

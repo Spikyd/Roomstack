@@ -1,4 +1,4 @@
-from roommate.models import UserProfile, Apartment
+from roommate.models import UserProfile, Apartment, Message
 
 
 def navbar_data(request):
@@ -10,7 +10,16 @@ def navbar_data(request):
 
 def user_has_posted_room(request):
     user = request.user
-    has_posted_room = False
+    user_apartment = None
     if user.is_authenticated:
-        has_posted_room = Apartment.objects.filter(author=user).exists()
-    return {'user_has_posted_room': has_posted_room}
+        user_apartment = Apartment.objects.filter(author=user).first()
+    return {'user_apartment': user_apartment}
+
+
+def unread_message_count(request):
+    if request.user.is_authenticated:
+        unread_count = Message.objects.filter(receiver=request.user, is_read=False).count()
+    else:
+        unread_count = 0
+
+    return {'unread_message_count': unread_count}

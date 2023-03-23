@@ -1,9 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, AuthenticationForm, PasswordResetForm
 from django.contrib.auth.models import User
-from django.forms import EmailInput, Textarea, DateInput, TextInput, URLInput, PasswordInput
+from django.forms import EmailInput, Textarea, DateInput, TextInput, URLInput
 
-from roommate.models import UserProfile, Apartment
+from roommate.models import UserProfile, Apartment, UserPreference, Lifestyle, Message
 
 
 class AuthenticationNewForm(AuthenticationForm):
@@ -30,10 +30,11 @@ class PasswordResetNewForm(PasswordResetForm):
 
 class UserRegisterForm(UserCreationForm):
     user_type = forms.ChoiceField(choices=UserProfile.USER_TYPE_CHOICES, label='Roommate Role')
+    gender = forms.ChoiceField(choices=UserProfile.GENDER_CHOICES, required=True)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2', 'user_type']
+        fields = ['username', 'email', 'password1', 'password2', 'user_type', 'gender']
 
         widgets = {
             'email': EmailInput(attrs={'placeholder': 'Please enter your email'}),
@@ -70,12 +71,13 @@ class PasswordChangeNewForm(PasswordChangeForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('profile_pic', 'first_name', 'last_name', 'bio', 'birthdate', 'location', 'phone_number',
+        fields = ('profile_pic', 'first_name', 'last_name', 'gender', 'bio', 'birthdate', 'location', 'phone_number',
                   'social_facebook', 'social_twitter', 'social_instagram')
         widgets = {
             'profile_pic': forms.FileInput(attrs={'class': 'form-control-file', 'placeholder': 'Choose a file...'}),
             'first_name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your first name...'}),
             'last_name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your last name...'}),
+            'gender': forms.Select(attrs={'class': 'form-control'}),
             'bio': Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Tell us about yourself...'}),
             'birthdate': DateInput(attrs={'class': 'form-control', 'type': 'date', 'placeholder': 'YYYY-MM-DD'}),
             'location': TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your location...'}),
@@ -105,3 +107,44 @@ class ApartmentForm(forms.ModelForm):
             'move_in_date': forms.DateInput(attrs={'type': 'date'}),
             'available_from': forms.DateInput(attrs={'type': 'date'}),
         }
+
+
+class UserPreferenceForm(forms.ModelForm):
+    class Meta:
+        model = UserPreference
+        fields = ['preferred_gender', 'preferred_age_min', 'preferred_age_max', 'smoking_preference', 'pets_preference']
+
+        widgets = {
+            'preferred_gender': forms.Select(attrs={'placeholder': 'Select preferred gender'}),
+            'preferred_age_min': forms.NumberInput(attrs={'placeholder': 'Enter minimum preferred age'}),
+            'preferred_age_max': forms.NumberInput(attrs={'placeholder': 'Enter maximum preferred age'}),
+            'smoking_preference': forms.Select(attrs={'placeholder': 'Select smoking preference'}),
+            'pets_preference': forms.Select(attrs={'placeholder': 'Select pets preference'}),
+        }
+
+
+class LifestyleForm(forms.ModelForm):
+    interests = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'Enter interests separated by commas'})
+    )
+    hobbies = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'Enter hobbies separated by commas'})
+    )
+
+    class Meta:
+        model = Lifestyle
+        fields = ['work_schedule', 'cleanliness', 'social', 'interests', 'hobbies']
+
+    def __init__(self, *args, **kwargs):
+        super(LifestyleForm, self).__init__(*args, **kwargs)
+        if self.instance:
+            self.fields['interests'].initial = self.instance.interests
+            self.fields['hobbies'].initial = self.instance.hobbies
+
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['content']
