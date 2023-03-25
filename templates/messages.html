@@ -11,11 +11,20 @@
                 <h3 class="text-center mb-4">Conversations</h3>
                 <div class="list-group">
                     {% for user in users_with_conversations %}
-                        <a href="{% url 'messages_view' user.pk %}" class="list-group-item list-group-item-action">
+                        <a href="{% url 'messages_view' user.pk %}"
+                           class="list-group-item list-group-item-action d-flex align-items-center">
+                            {% if user.userprofile.profile_pic %}
+                                <img src="{{ user.userprofile.profile_pic.url }}"
+                                     alt="{{ user.userprofile.first_name }}'s profile picture" class="profile-pic mr-3">
+                            {% else %}
+                                <img src="{% static 'members/avatar_logo.png' %}" alt="Default profile picture"
+                                     class="profile-pic mr-3">
+                            {% endif %}
                             {{ user.userprofile.first_name }} {{ user.userprofile.last_name }}, {{ user.userprofile.location }}
                         </a>
                     {% endfor %}
                 </div>
+
             </div>
             <div class="col-md-6">
                 <div class="message-container">
@@ -24,18 +33,19 @@
                     <div class="messages">
                         {% for message in chat_messages %}
                             <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
-                                <div class="user-avatar">
-                                    {% if message.sender.userprofile.profile_pic %}
-                                        <img src="{{ message.sender.userprofile.profile_pic.url }}"
-                                             alt="{{ message.sender.username }}'s profile picture">
-                                    {% else %}
-                                        <img src="{% static 'members/avatar_logo.png' %}"
-                                             alt="Default profile picture">
-                                    {% endif %}
-                                </div>
+                                {% if message.sender != request.user %}
+                                    <div class="user-avatar">
+                                        {% if message.sender.userprofile.profile_pic %}
+                                            <img src="{{ message.sender.userprofile.profile_pic.url }}"
+                                                 alt="{{ message.sender.username }}'s profile picture">
+                                        {% else %}
+                                            <img src="{% static 'members/avatar_logo.png' %}"
+                                                 alt="Default profile picture">
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
                                 <div class="message-bubble">
-                                    <div class="message-content">
-                                        <strong>{{ message.sender.userprofile.first_name }}:</strong> {{ message.content }}<br>
+                                    <div class="message-content">{{ message.content }}<br>
                                         <small>{{ message.timestamp }}</small>
                                     </div>
                                 </div>
@@ -57,10 +67,12 @@
             <div class="col-md-3">
                 <div class="card">
                     {% if receiver.userprofile.profile_pic %}
-                        <img src="{{ receiver.userprofile.profile_pic.url }}" class="card-img-top profile-pic"
+                        <img src="{{ receiver.userprofile.profile_pic.url }}"
+                             class="card-img-top profile-pic conversation-profile-pic"
                              alt="User Profile Picture">
                     {% else %}
-                        <img src="{% static 'members/avatar_logo.png' %}" class="card-img-top profile-pic"
+                        <img src="{% static 'members/avatar_logo.png' %}"
+                             class="card-img-top profile-pic conversation-profile-pic"
                              alt="User Profile Picture">
                     {% endif %}
                     <div class="card-body">

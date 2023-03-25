@@ -1,3 +1,5 @@
+from django.db.models import OuterRef, Subquery
+
 from roommate.models import UserProfile, Apartment, Message
 
 
@@ -18,7 +20,10 @@ def user_has_posted_room(request):
 
 def unread_message_count(request):
     if request.user.is_authenticated:
-        unread_count = Message.objects.filter(receiver=request.user, is_read=False).count()
+        latest_messages = Message.objects.filter(receiver=request.user, is_read=False,
+                                                 sender=OuterRef('sender')).order_by('-timestamp')
+        unread_count = Message.objects.filter(receiver=request.user, is_read=False,
+                                              timestamp=Subquery(latest_messages.values('timestamp')[:1])).count()
     else:
         unread_count = 0
 

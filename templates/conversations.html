@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
     {% include 'navbar.html' %}
     <div class="container-fluid mt-5">
@@ -7,7 +8,15 @@
                 <h3 class="text-center mb-4">Conversations</h3>
                 <div class="list-group">
                     {% for user in users_with_conversations %}
-                        <a href="{% url 'messages_view' user.pk %}" class="list-group-item list-group-item-action">
+                        <a href="{% url 'messages_view' user.pk %}"
+                           class="list-group-item list-group-item-action d-flex align-items-center">
+                            {% if user.userprofile.profile_pic %}
+                                <img src="{{ user.userprofile.profile_pic.url }}"
+                                     alt="{{ user.userprofile.first_name }}'s profile picture" class="profile-pic mr-3">
+                            {% else %}
+                                <img src="{% static 'members/avatar_logo.png' %}" alt="Default profile picture"
+                                     class="profile-pic mr-3">
+                            {% endif %}
                             {{ user.userprofile.first_name }} {{ user.userprofile.last_name }}, {{ user.userprofile.location }}
                         </a>
                     {% endfor %}
@@ -15,4 +24,12 @@
             </div>
         </div>
     </div>
+<style>
+    .profile-pic {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+</style>
 {% endblock %}

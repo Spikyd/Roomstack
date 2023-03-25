@@ -2,6 +2,7 @@
 {% load static %}
 {% load custom_filters %}
 {% block title %} Find Roommates {% endblock %}
+{% block loadcss %}<link rel="stylesheet" type="text/css" href="{% static 'css/matched_users.css' %}">{% endblock %}
 {% block content %}
     {% include 'navbar.html' %}
     <div class="container mt-4">

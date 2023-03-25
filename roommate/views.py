@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
-from django.db.models import Q, Max, F
+from django.db.models import Q, Max, F, Subquery, OuterRef
 from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -79,12 +79,6 @@ def toggle_favorite(request, pk):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-def user_has_room(request):
-    user_apartments_count = Apartment.objects.filter(author=request.user).count()
-    context = {'user_apartments_count': user_apartments_count}
-    return render(request, 'home_page.html', context)
-
-
 class UserProfileUpdateView(LoginRequiredMixin, FormView):
     template_name = 'settings.html'
 
@@ -120,7 +114,7 @@ class UserProfileUpdateView(LoginRequiredMixin, FormView):
                                                     'lifestyle_form': lifestyle_form})
 
 
-class ApartmentCreateView(CreateView):
+class ApartmentCreateView(LoginRequiredMixin, CreateView):
     model = Apartment
     form_class = ApartmentForm
     template_name = 'post_a_room.html'
@@ -154,6 +148,7 @@ class ApartmentCreateView(CreateView):
             return self.form_invalid(form)
 
 
+@login_required
 def browse_rooms(request):
     apartment_list = Apartment.objects.all().order_by('-date_posted')
     filter = ApartmentFilter(request.GET, queryset=apartment_list)
@@ -169,13 +164,13 @@ def browse_rooms(request):
     return render(request, 'browse_rooms.html', context)
 
 
-class ApartmentDetailView(DetailView):
+class ApartmentDetailView(LoginRequiredMixin, DetailView):
     model = Apartment
     template_name = 'apartment_detail.html'
     context_object_name = 'apartment'
 
 
-class UserProfileView(DetailView):
+class UserProfileView(LoginRequiredMixin, DetailView):
     model = UserProfile
     template_name = 'user_profile.html'
     context_object_name = 'user_profile'
@@ -206,11 +201,13 @@ class ApartmentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse_lazy('apartment_detail', args=[self.object.pk])
 
 
+@login_required
 def delete_apartment(request, pk):
     Apartment.objects.filter(id=pk).delete()
     return redirect('browse_rooms')
 
 
+@login_required
 def favorite_rooms(request):
     favorites = Favorite.objects.filter(user=request.user)
     return render(request, 'favorite_rooms.html', {'favorites': favorites})
@@ -290,7 +287,6 @@ class MatchFinder(LoginRequiredMixin, View):
             messages.error(request, "Access restricted. This page is available only for seeker users.")
             return redirect('home')  # Redirect to a different page, e.g., home or user profile
 
-
         # Filter users who have a profile and are providers
         users = User.objects.exclude(id=user.id).exclude(userprofile=None).filter(userprofile__user_type='provider',
                                                                                   apartment__isnull=False)
@@ -309,6 +305,7 @@ class MatchFinder(LoginRequiredMixin, View):
         return render(request, 'matched_users.html', context)
 
 
+@login_required
 def messages_view(request, user_id):
     user = User.objects.get(pk=user_id)
     # Fetch users with conversations
@@ -350,11 +347,14 @@ class UnreadMessagesView(LoginRequiredMixin, ListView):
     context_object_name = 'conversations'
 
     def get_queryset(self):
-        return Message.objects.filter(receiver=self.request.user, is_read=False).annotate(
-            latest_timestamp=Max('timestamp')).filter(
-            timestamp=F('latest_timestamp')).order_by('-timestamp')
+        latest_messages = Message.objects.filter(receiver=self.request.user, is_read=False,
+                                                 sender=OuterRef('sender')).order_by('-timestamp')
+        return Message.objects.filter(receiver=self.request.user, is_read=False,
+                                      timestamp=Subquery(latest_messages.values('timestamp')[:1])).order_by(
+            '-timestamp')
 
 
+@login_required
 def conversations_view(request):
     # Fetch users with conversations
     users_with_conversations = User.objects.filter(

@@ -43,7 +43,8 @@
                     <ul class="unread-messages-list">
                         {% for conversation in conversations %}
                             <li>
-                                <a href="{% url 'messages_view' conversation.sender.pk %}">{{ conversation.sender.userprofile.first_name }} {{ conversation.sender.userprofile.last_name }}</a>
+                                <a href="{% url 'messages_view' conversation.sender.pk %}">{{ conversation.sender.userprofile.first_name }} {{ conversation.sender.userprofile.last_name }}
+                                    has sent you a message</a>
                             </li>
                         {% endfor %}
                     </ul>
