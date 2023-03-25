@@ -7,7 +7,7 @@
 }
 
 .messages {
-    max-height: 600px;
+    max-height: 500px;
     overflow-y: auto;
     padding-bottom: 20px;
     position: relative;
@@ -17,6 +17,12 @@
     display: flex;
     align-items: flex-start;
     margin-bottom: 15px;
+}
+
+.message-content {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .sent {
@@ -109,15 +115,9 @@
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-.profile-pic {
+.conversation-profile-pic {
     width: 40px;
     height: 40px;
     object-fit: cover;
     border-radius: 50%;
-}
-
-.conversation-profile-pic {
-    width: 100px; /* Set the desired width */
-    height: 550px; /* Set the desired height */
-    object-fit: cover; /* This will make sure the image maintains its aspect ratio */
 }

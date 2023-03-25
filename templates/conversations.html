@@ -12,10 +12,10 @@
                            class="list-group-item list-group-item-action d-flex align-items-center">
                             {% if user.userprofile.profile_pic %}
                                 <img src="{{ user.userprofile.profile_pic.url }}"
-                                     alt="{{ user.userprofile.first_name }}'s profile picture" class="profile-pic mr-3">
+                                     alt="{{ user.userprofile.first_name }}'s profile picture" class="profile-pic mr-3 conversation-profile-pic">
                             {% else %}
                                 <img src="{% static 'members/avatar_logo.png' %}" alt="Default profile picture"
-                                     class="profile-pic mr-3">
+                                     class="profile-pic mr-3 conversation-profile-pic">
                             {% endif %}
                             {{ user.userprofile.first_name }} {{ user.userprofile.last_name }}, {{ user.userprofile.location }}
                         </a>
