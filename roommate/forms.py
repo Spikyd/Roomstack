@@ -124,13 +124,16 @@ class UserPreferenceForm(forms.ModelForm):
 
 
 class LifestyleForm(forms.ModelForm):
+
     interests = forms.CharField(
         required=False,
-        widget=forms.TextInput(attrs={'placeholder': 'Enter interests separated by commas'})
+        widget=forms.TextInput(attrs={'placeholder': 'Enter interests separated by commas'}),
+        strip=False
     )
     hobbies = forms.CharField(
         required=False,
-        widget=forms.TextInput(attrs={'placeholder': 'Enter hobbies separated by commas'})
+        widget=forms.TextInput(attrs={'placeholder': 'Enter hobbies separated by commas'}),
+        strip=False
     )
 
     class Meta:

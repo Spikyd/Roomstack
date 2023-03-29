@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
-from django.db.models import Q, Max, F, Subquery, OuterRef
+from django.db.models import Q, Subquery, OuterRef
 from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -226,8 +226,9 @@ class MatchFinder(LoginRequiredMixin, View):
         score = 0
 
         # Check for gender preference match
-        if other_user.userprofile.gender in (user_preference.preferred_gender, 'any') and user.userprofile.gender in (
-                other_user_preference.preferred_gender, 'any'):
+        if user_preference.preferred_gender in (
+            other_user.userprofile.gender, 'any') and other_user_preference.preferred_gender in (
+                user.userprofile.gender, 'any'):
             score += 1
 
         # Check for age preference match
