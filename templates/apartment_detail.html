@@ -100,8 +100,10 @@
                                 <div class="d-flex">
                                     <a href="{% url 'user_profile' apartment.author.pk %}" class="btn btn-primary">View
                                         Profile</a>
-                                    <a href="{% url 'messages_view' apartment.author.pk %}"
-                                       class="btn btn-secondary ml-2">Message</a>
+                                    {% if user.userprofile.user_type == 'seeker' %}
+                                        <a href="{% url 'messages_view' apartment.author.pk %}"
+                                           class="btn btn-secondary ml-2">Message</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
