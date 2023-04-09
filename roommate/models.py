@@ -104,6 +104,13 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def is_profile_complete(self):
+        required_fields = ['first_name', 'last_name', 'gender', 'birthdate']
+        return all(getattr(self, field) for field in required_fields)
+
+    def is_all_data_complete(self):
+        return self.is_profile_complete() and self.user.preference.is_complete() and self.user.lifestyle.is_complete()
+
 
 class UserPreference(models.Model):
     GENDER_CHOICES = [
@@ -130,6 +137,11 @@ class UserPreference(models.Model):
     preferred_age_max = models.PositiveIntegerField(default=100)
     smoking_preference = models.CharField(max_length=12, choices=SMOKING_CHOICES, default='indifferent')
     pets_preference = models.CharField(max_length=12, choices=PETS_CHOICES, default='indifferent')
+
+    def is_complete(self):
+        # Add the required fields for UserPreference here.
+        required_fields = ['preferred_gender', 'preferred_age_min', 'preferred_age_max']
+        return all(getattr(self, field) for field in required_fields)
 
 
 class Lifestyle(models.Model):
@@ -165,6 +177,11 @@ class Lifestyle(models.Model):
 
     def __str__(self):
         return f'{self.user.username} - Lifestyle'
+
+    def is_complete(self):
+        # Add the required fields for Lifestyle here.
+        required_fields = ['work_schedule', 'cleanliness', 'social', 'interests', 'hobbies']
+        return all(getattr(self, field) for field in required_fields)
 
 
 class Message(models.Model):

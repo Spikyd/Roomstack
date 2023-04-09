@@ -71,13 +71,12 @@ class PasswordChangeNewForm(PasswordChangeForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('profile_pic', 'first_name', 'last_name', 'gender', 'bio', 'birthdate', 'location', 'phone_number',
+        fields = ('profile_pic', 'first_name', 'last_name', 'bio', 'birthdate', 'location', 'phone_number',
                   'social_facebook', 'social_twitter', 'social_instagram')
         widgets = {
             'profile_pic': forms.FileInput(attrs={'class': 'form-control-file', 'placeholder': 'Choose a file...'}),
             'first_name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your first name...'}),
             'last_name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your last name...'}),
-            'gender': forms.Select(attrs={'class': 'form-control'}),
             'bio': Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Tell us about yourself...'}),
             'birthdate': DateInput(attrs={'class': 'form-control', 'type': 'date', 'placeholder': 'YYYY-MM-DD'}),
             'location': TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your location...'}),

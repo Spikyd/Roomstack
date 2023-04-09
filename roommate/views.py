@@ -217,17 +217,18 @@ class MatchFinder(LoginRequiredMixin, View):
 
     @staticmethod
     def calculate_compatibility(user, other_user, user_preference, other_user_preference):
+        if user.userprofile.birthdate is None or other_user.userprofile.birthdate is None:
+            return 0  # If either user's birthdate is not set, skip this user and return a compatibility percentage of 0
+
         user_age = (date.today() - user.userprofile.birthdate).days // 365
         other_user_age = (date.today() - other_user.userprofile.birthdate).days // 365
-        if other_user.userprofile.birthdate is None:
-            return 0  # If birthdate is not set, skip this user and return a compatibility percentage of 0
 
         fixed_score_categories = 7
         score = 0
 
         # Check for gender preference match
         if user_preference.preferred_gender in (
-            other_user.userprofile.gender, 'any') and other_user_preference.preferred_gender in (
+                other_user.userprofile.gender, 'any') and other_user_preference.preferred_gender in (
                 user.userprofile.gender, 'any'):
             score += 1
 
@@ -302,6 +303,7 @@ class MatchFinder(LoginRequiredMixin, View):
 
         context = {
             'matched_users': scored_users,
+            'current_user': request.user,
         }
         return render(request, 'matched_users.html', context)
 

@@ -2,7 +2,8 @@
 {% load static %}
 {% load custom_filters %}
 {% block title %} Find Roommates {% endblock %}
-{% block loadcss %}<link rel="stylesheet" type="text/css" href="{% static 'css/matched_users.css' %}">{% endblock %}
+{% block loadcss %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/matched_users.css' %}">{% endblock %}
 {% block content %}
     {% include 'navbar.html' %}
     <div class="container mt-4">
@@ -11,6 +12,17 @@
                 <h2 class="mb-4">Matched Users</h2>
             </div>
         </div>
+        {% if not current_user.userprofile.is_all_data_complete %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-warning" role="alert">
+                        To ensure better compatibility, please complete your profile, preferences, and lifestyle
+                        information.
+                        <a href="{% url 'settings' %}" class="btn btn-primary">Complete Profile</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
         <div class="row">
             {% for user, compatibility in matched_users %}
                 <div class="col-md-6 col-lg-4 col-xl-3 mb-4">

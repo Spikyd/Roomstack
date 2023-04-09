@@ -19,7 +19,7 @@ class ApartmentFilter(django_filters.FilterSet):
         fields = [
             'address', 'city', 'state', 'zipcode', 'price', 'bedrooms', 'bathrooms', 'move_in_date', 'is_furnished',
             'has_parking', 'has_balcony', 'has_pool', 'has_gym', 'has_washing_machine', 'has_dryer', 'has_dishwasher',
-            'has_air_conditioning', 'has_wifi', 'has_bbq_facilities', 'is_available', 'available_from',
+            'has_air_conditioning', 'has_wifi', 'has_bbq_facilities',
         ]
 
     def __init__(self, *args, **kwargs):
