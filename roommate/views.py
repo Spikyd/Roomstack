@@ -197,8 +197,21 @@ class ApartmentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         messages.error(self.request, "You don't have permission to edit this apartment.")
         return redirect('browse_rooms')
 
-    def get_success_url(self):
-        return reverse_lazy('apartment_detail', args=[self.object.pk])
+    def form_valid(self, form):
+        apartment = form.save(commit=False)
+        apartment.author = self.request.user
+        apartment.save()
+        files = self.request.FILES.getlist('images')
+        for image in apartment.images.all():
+            image.delete()
+        for f in files:
+            image_instance = ApartmentImage.objects.create(image=f, apartment=apartment)
+            apartment.images.add(image_instance)
+        return redirect('apartment_detail', pk=apartment.pk)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'There was an error updating the apartment. Please try again.')
+        return super().form_invalid(form)
 
 
 @login_required
