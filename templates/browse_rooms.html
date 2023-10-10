@@ -1,68 +1,61 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Browse Rooms{% endblock %}
-{% block loadcss %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/browse_rooms.css' %}">{% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
-    {% include 'navbar.html' %}
-    <div class="container-fluid mt-5">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="card card-body">
-                    <form method="get">
-                        {{ filter.form.as_p }}
-                        <button type="submit" class="btn btn-primary">Apply Filters</button>
-                        <a href="{% url 'browse_rooms' %}" class="btn btn-secondary">Reset Filters</a>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-9">
-                <h2><i class="fas fa-search"></i> Browse Rooms</h2>
-                <hr>
+<div class="container my-5">
+    <!-- Filters Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" action="{% url 'browse_rooms' %}">
                 <div class="row">
-                    {% for apartment in filtered_apartments %}
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100">
-                                {% for image in apartment.images.all %}
-                                    {% if image.image %}
-                                        {% if forloop.counter0 == 0 %}
-                                            <img class="card-img-top img-fluid" src="{{ image.image.url }}"
-                                                 alt="Profile Image">
-                                        {% endif %}
-                                    {% endif %}
-                                {% endfor %}
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ apartment.address }}, {{ apartment.city }}, {{ apartment.state }} {{ apartment.zipcode }}</h5>
-                                    <p class="card-text">Price: {{ apartment.price }} lei</p>
-                                    <p class="card-text">Bedrooms: {{ apartment.bedrooms }}</p>
-                                    <p class="card-text">Bathrooms: {{ apartment.bathrooms }}</p>
-                                    <p class="card-text">Move-in Date: {{ apartment.move_in_date|date:"F j, Y" }}</p>
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        <a href="{% url 'apartment_detail' apartment.id %}" class="btn btn-primary btn-sm"><i
-                                                class="fas fa-info-circle"> View details</i></a>
-                                        {% if user.userprofile.user_type == 'seeker' %}
-                                            <form method="post" action="{% url 'toggle_favorite' pk=apartment.id %}">
-                                                {% csrf_token %}
-                                                <button class="btn btn-primary btn-sm" type="submit">
-                                                    {% if apartment.is_favorite %}
-                                                        <i class="fas fa-heart" style="color: #F44336"></i>
-                                                    {% else %}
-                                                        <i class="fas fa-heart" style="color: #ffffff"></i>
-                                                    {% endif %}
-                                                </button>
-                                            </form>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% empty %}
-                        <p>No apartments found.</p>
-                    {% endfor %}
+                    <div class="col-md-4 mb-3">
+                        <label for="cityFilter" class="form-label">City</label>
+                        {{ form.city }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="priceMin" class="form-label">Min Price</label>
+                        {{ form.price_min }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="priceMax" class="form-label">Max Price</label>
+                        {{ form.price_max }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Rooms Display -->
+    <div class="row">
+        {% for room in rooms %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ room.image.url }}" alt="{{ room.title }}" class="card-img-top">
+                <div class="card-body">
+                    <h5>{{ room.title }}</h5>
+                    <p>${{ room.price }}/month</p>
+                    <a href="{% url 'room_detail' room.id %}" class="btn btn-primary">View Details</a>
                 </div>
             </div>
         </div>
+        {% endfor %}
     </div>
+
+    <!-- Pagination -->
+    <div class="mt-4">
+        {% if rooms.has_previous %}
+            <a href="?page=1" class="btn btn-outline-primary">First</a>
+            <a href="?page={{ rooms.previous_page_number }}" class="btn btn-outline-primary">Previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ rooms.number }} of {{ rooms.paginator.num_pages }}.
+        </span>
+
+        {% if rooms.has_next %}
+            <a href="?page={{ rooms.next_page_number }}" class="btn btn-outline-primary">Next</a>
+            <a href="?page={{ rooms.paginator.num_pages }}" class="btn btn-outline-primary">Last</a>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
